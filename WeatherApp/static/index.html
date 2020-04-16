@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8"/>
+</head> 
+
+<body>
+
+<div id="app">
+<h3>Vremenska prognoza</h3>
+<form>
+<table>
+<tbody>
+<tr>
+<td>Odaberite lokacije</td>
+<td>
+ <select id = "gradMulti" multiple style = "width: 200px;">
+ 	<option value = "Belgrade">Beograd</option>
+ 	<option value = "Sarajevo">Sarajevo</option>
+ 	<option value = "Zagreb">Zagreb</option>
+ 	<option value = "Budapest">Budimpesta</option>
+ 	<option value = "London">London</option>
+ 	<option value = "Rome">Rim</option>
+ 	<option value = "New York">Njujork</option>
+ 	<option value = "Prague">Prag</option>
+ 	<option value = "Viena">Bec</option>
+ 	
+ </select>
+</td>
+<td>Odaberite podatak</td>
+<td>
+ <select id = "podatak">
+ 	<option value = "pressure">pritisak</option>
+ 	<option value = "temp">temperatura</option>
+ 	<option value = "humidity">vlaznost</option>
+
+ </select>
+</td>
+<td>Vremenski interval</td>
+<td>
+ <select id = "interval">
+ 	<option value = "6">6 h</option>
+ 	<option value = "9">9 h</option>
+ 	<option value = "12">12 h</option>
+ 	<option value = "18">18 h</option>
+ 	<option value = "24">24 h</option>
+ </select>
+</td>
+<td>
+ <button id = "prikazi" type= "submit">Prikazi podatke</button>
+</td>
+</tr>
+</tbody>
+</table>
+</form>
+ 
+ <table id = "tabela" border = "1">
+ 	<thead>
+ 		<tr>
+ 			<th>Grad</th>
+ 			<th>Vreme merenja</th>
+ 			<th>Temperatura</th>
+ 			<th>Minimalna temperatura </th>
+ 			<th>Maksimalna temperatura</th>
+ 			<th>Pritisak</th>
+ 			<th>Vidljivost</th>
+ 			<th>Vlaznost</th>
+ 		</tr>
+ 	</thead>
+ 	<tbody>
+ 	</tbody>
+ </table>
+ <div class="chartContainer" style="height: 300px; width: 100%;"></div>
+</div>
+
+<script src="js/jquery.min.js"></script>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/tokenize2.css">
+
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+
+<script type="text/javascript" src="js/tokenize2.js"></script>
+<script src="js/jquery.canvasjs.min.js"></script>
+<script src="app/main.js"></script>
+
+
+
+</body>
+</html>
