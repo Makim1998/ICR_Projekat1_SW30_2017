@@ -12,7 +12,9 @@ function pretvoriGradove(){
 };
 
 $(document).ready(function(){
+	popuniGradove();
 	$("#gradMulti").tokenize2();
+
 	
 	$("form").on('submit',function(e){
 		e.preventDefault();
@@ -74,7 +76,7 @@ function kreirajGrafikon(data) {
 		console.log(tacke);
 		podaci.push({
 			type: "line", //try changing to column, area
-			toolTipContent: "{label}: {y} mm",
+			toolTipContent: "{label}: {y} "+ data.podatak.split(" ")[1],
 			showInLegend: true, 
 	        name: "series" + index,
 	        legendText: graf.grad,
@@ -86,7 +88,7 @@ function kreirajGrafikon(data) {
 			text: "Dijagram" 
 		},
 		axisY: {
-			title: podatak,
+			title: data.podatak,
 			includeZero: false
 		},
 		axisX: {
@@ -110,5 +112,37 @@ function kreirajTabelu(data) {
                 '<td>' + grad.vidljivost + '</td>' + 
                 '<td>' + grad.vlaznost + '</td>');
         $('#tabela').children('tbody').append(tr);
+	});
+}
+function popuniGradove() {
+	$.ajax({
+		type : 'GET',
+		url : 'rest/gradovi',
+		contentType : 'application/json',
+		success : function(data){
+			console.log(data);
+			var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+
+			console.log("success = ");
+			console.log(list);
+			var arrayLength = list.length;
+			console.log(arrayLength);
+			for (var i = 0; i < arrayLength; i++) {
+			    console.log(list[i]);
+			    //Do something
+			}
+			$('#gradMulti').empty();	//da se ne bi opet isti dodali
+			$.each(list, function (i, item) {
+				console.log(item.city);
+			    $('#gradMulti').append($('<option>',{
+			    	value: item.city,
+			        text : item.city 
+			    }));
+			});
+		},
+		error: function(xhr, status, error) {
+			console.log("xhr = " + xhr + " status = " + status + " error = " + error);
+			alert(xhr.responseText);
+		}
 	});
 }

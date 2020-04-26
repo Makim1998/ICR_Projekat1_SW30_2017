@@ -8,38 +8,29 @@
 <body>
 
 <div id="app">
-<h3>Vremenska prognoza</h3>
 <form>
-<table>
+<table id = "izbor">
 <tbody>
 <tr>
-<td>Odaberite lokacije</td>
+<td>Odaberite lokacije: </td>
 <td>
  <select id = "gradMulti" multiple style = "width: 200px;">
- 	<option value = "Belgrade">Beograd</option>
- 	<option value = "Sarajevo">Sarajevo</option>
- 	<option value = "Zagreb">Zagreb</option>
- 	<option value = "Budapest">Budimpesta</option>
- 	<option value = "London">London</option>
- 	<option value = "Rome">Rim</option>
- 	<option value = "New York">Njujork</option>
- 	<option value = "Prague">Prag</option>
- 	<option value = "Viena">Bec</option>
- 	
+
  </select>
 </td>
-<td>Odaberite podatak</td>
+<td></td>
+<td>Odaberite podatak: </td>
 <td>
- <select id = "podatak">
+ <select id = "podatak" class = "form-control">
  	<option value = "pressure">pritisak</option>
  	<option value = "temp">temperatura</option>
  	<option value = "humidity">vlaznost</option>
 
  </select>
 </td>
-<td>Vremenski interval</td>
+<td>Vremenski interval: </td>
 <td>
- <select id = "interval">
+ <select id = "interval" class = "form-control">
  	<option value = "6">6 h</option>
  	<option value = "9">9 h</option>
  	<option value = "12">12 h</option>
@@ -48,35 +39,39 @@
  </select>
 </td>
 <td>
- <button id = "prikazi" type= "submit">Prikazi podatke</button>
+ <button id = "prikazi" class="btn btn-primary" type= "submit">Prikazi podatke</button>
 </td>
 </tr>
 </tbody>
 </table>
 </form>
  
+<div id = "prikaz">
  <table id = "tabela" border = "1">
  	<thead>
  		<tr>
  			<th>Grad</th>
  			<th>Vreme merenja</th>
- 			<th>Temperatura</th>
- 			<th>Minimalna temperatura </th>
- 			<th>Maksimalna temperatura</th>
- 			<th>Pritisak</th>
- 			<th>Vidljivost</th>
- 			<th>Vlaznost</th>
+ 			<th>Temperatura °C</th>
+ 			<th>Minimalna temperatura °C</th>
+ 			<th>Maksimalna temperatura °C</th>
+ 			<th>Pritisak hPa</th>
+ 			<th>Vidljivost m</th>
+ 			<th>Vlaznost %</th>
  		</tr>
  	</thead>
  	<tbody>
  	</tbody>
  </table>
- <div class="chartContainer" style="height: 300px; width: 100%;"></div>
+</div>
+<div class="chartContainer" ></div>
 </div>
 
 <script src="js/jquery.min.js"></script>
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <link rel="stylesheet" href="css/tokenize2.css">
+<link rel="stylesheet" href="css/main.css">
+
 
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
 

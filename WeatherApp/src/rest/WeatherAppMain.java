@@ -6,12 +6,16 @@ import static spark.Spark.staticFiles;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,9 +25,12 @@ import org.json.JSONObject;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 
 import beans.Grad;
+import beans.GradFajl;
 import beans.Gradovi;
+import beans.GradoviIzFajla;
 import beans.Grafikon;
 import beans.Grafikoni;
 
@@ -54,11 +61,14 @@ public class WeatherAppMain {
 			{
 			    int j = i/3;
 			    Double vrednost = arr.getJSONObject(j).getJSONObject("main").getDouble(podatak);
+			    if(podatak.equals("temp")) {
+			    	vrednost -= 273.15;
+			    }
 			    System.out.println(vrednost);
 			    String datum = arr.getJSONObject(j).getString("dt_txt");
 			    System.out.println(datum);
 			    graf.getDatumi().add(datum);
-			    graf.getMerenja().add(String.valueOf(vrednost));
+			    graf.getMerenja().add(String.format("%.2f",vrednost));
 			}
 			return graf;
 		} catch (IOException e) {
@@ -82,14 +92,17 @@ public class WeatherAppMain {
 			Map<String, Object> respMap = jsonToMap(result.toString());
 			Map<String, Object> main = jsonToMap(respMap.get("main").toString());
 			String datum = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
-			String tempMin = main.get("temp_min").toString();
+			String tempMin = String.format("%.2f",(Double)main.get("temp_min") - 273.15);
 			String vlaznost = main.get("humidity").toString();
-			String tempMax = main.get("temp_max").toString();
-			String temp = main.get("temp").toString();
+			String tempMax = String.format("%.2f",(Double)main.get("temp_max") - 273.15);
+			String temp =  String.format("%.2f",(Double)main.get("temp") - 273.15);
 			String pritisak = main.get("pressure").toString();
-			String vidljivost = respMap.get("visibility").toString();
+			String vidljivost = "nema podatka";
+			if(respMap.get("visibility") != null) {
+				vidljivost = respMap.get("visibility").toString();
+			}
 			System.out.println(datum+" " +vlaznost +" "+temp+" " + tempMin + " " +tempMax +" "+pritisak+ " " + vlaznost + " " + vidljivost );
-			Grad g = new Grad(imeGrada, datum, Double.parseDouble(temp),Double.parseDouble(tempMin), Double.parseDouble(tempMax), Double.parseDouble(pritisak), Double.parseDouble(pritisak), Double.parseDouble(vlaznost));
+			Grad g = new Grad(imeGrada, datum, Double.parseDouble(temp),Double.parseDouble(tempMin), Double.parseDouble(tempMax), Double.parseDouble(pritisak), vidljivost, Double.parseDouble(vlaznost));
 			return g;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -98,16 +111,34 @@ public class WeatherAppMain {
 		return null;
 		
 	}
+	
 	private static Map<String,Object> jsonToMap(String s){
 		Map<String,Object> map = g.fromJson(s, new TypeToken<HashMap<String,Object>>() {}.getType());
 		return map;
 	}
 	
+	
 	public static void main(String[] args) throws Exception {
-		//zaGrafikon("London", "temp", 9);
+		//zaGrafikon("Praha", "temp", 9);
+		String path = System.getProperty("user.dir");
+		System.out.println(path);
 		port(8080);
 		
 		staticFiles.externalLocation(new File("./static").getCanonicalPath()); 
+		
+		get("rest/gradovi", (req, res) -> {
+			res.type("application/json");
+			try {
+				JsonReader jr = new JsonReader( new FileReader("gradovi.txt"));
+				ArrayList<GradFajl> gradovi = g.fromJson(jr, new TypeToken<ArrayList<GradFajl>>(){}.getType());
+				GradoviIzFajla nazivi = new GradoviIzFajla();
+				nazivi.setGradovi(gradovi);
+				return g.toJson(nazivi.getGradovi());
+	        }catch(IOException e){
+	            e.printStackTrace();
+	        }
+			return null;
+		});
 		
 		get("rest/tabela/:grad", (req, res) -> {
 			res.type("application/json");
@@ -137,7 +168,17 @@ public class WeatherAppMain {
 			int interval = Integer.parseInt(req.params(":interval"));
 			System.out.println(interval);
 			String[] split = nazivi.split(";");
-			Grafikoni grafikoni = new Grafikoni(podatak);
+			String prikaz = "";
+			if(podatak.equals("temp")) {
+				prikaz = "Temperatura °C";
+			}
+			if(podatak.equals("pressure")) {
+				prikaz = "Pritisak hPa";
+			}
+			if(podatak.equals("humidity")) {
+				prikaz = "Vidljivost %";
+			}
+			Grafikoni grafikoni = new Grafikoni(prikaz);
 			for(int i=0;i < split.length;i++) {
 				System.out.println(split[i]);
 				Grafikon graf = zaGrafikon(split[i], podatak, interval);

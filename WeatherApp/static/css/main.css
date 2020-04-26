@@ -1,0 +1,21 @@
+#tabela{
+  width: 80%;
+  border: 10px solid #0080c0;
+  padding: 10px;
+  margin: auto;
+}
+
+#izbor{
+  width: 80%;
+  padding: 10px;
+  margin: auto;
+}
+.chartContainer {
+	margin: auto;
+	height: 300px;
+	width: 80%;
+}
+#prikaz {
+  padding: 10px;
+  margin: auto;
+}

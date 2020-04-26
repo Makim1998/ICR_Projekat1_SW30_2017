@@ -7,11 +7,11 @@ public class Grad {
 	private double tempMin;
 	private double tempMax;
 	private double pritisak;
-	private double vidljivost;
+	private String vidljivost;
 	private double vlaznost;
 	
 	public Grad(String ime, String datum, double temperatura, double tempMin, double tempMax, double pritisak,
-			double vidljivost, double vlaznost) {
+			String vidljivost, double vlaznost) {
 		super();
 		this.ime = ime;
 		this.datum = datum;
@@ -58,10 +58,10 @@ public class Grad {
 	public void setPritisak(double pritisak) {
 		this.pritisak = pritisak;
 	}
-	public double getVidljivost() {
+	public String getVidljivost() {
 		return vidljivost;
 	}
-	public void setVidljivost(double vidljivost) {
+	public void setVidljivost(String vidljivost) {
 		this.vidljivost = vidljivost;
 	}
 	public double getVlaznost() {
